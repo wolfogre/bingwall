@@ -20,6 +20,12 @@
   revision = "66aacef3dd8a676686c7ae3716979581e8b03c47"
 
 [[projects]]
+  branch = "v2"
+  name = "gopkg.in/mgo.v2"
+  packages = [".","bson","internal/json","internal/sasl","internal/scram"]
+  revision = "3f83fa5005286a7fe593b055f0d7771a7dce4655"
+
+[[projects]]
   name = "qiniupkg.com/x"
   packages = ["bytes.v7","log.v7","reqid.v7"]
   revision = "8fdcb89a80ae34e50b752c0dace258eb0256d2d8"
@@ -28,6 +34,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c6ef7c4416df13f1f1adb35258243eab50505de7ea719e763bf90ea3e5d0be6b"
+  inputs-digest = "445c9744196abcd92287ce9bade66281972f37b1ca9c486ceb8be4a84265ee04"
   solver-name = "gps-cdcl"
   solver-version = 1

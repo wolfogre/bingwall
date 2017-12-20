@@ -11,6 +11,7 @@ import (
 
 	"github.com/qiniu/api.v7/storage"
 	"github.com/qiniu/api.v7/auth/qbox"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Handler struct {
@@ -44,7 +45,9 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) Crawl() {
 	for {
-		GetImage(GetUrl())
+		imageInfo := GetImage()
+		DownloadImage("https://cn.bing.com" + imageInfo.Images[0].Url)
+		SaveMongo(imageInfo)
 		h.Finished = time.Now().Local().Format("20060102")
 		nextDay := time.Now().Local().Add(24 * time.Hour)
 		nextDay = time.Date(nextDay.Year(), nextDay.Month(), nextDay.Day(), 0, 0, 0, 0, nextDay.Location())
@@ -56,10 +59,12 @@ type JsonResponse struct {
 	Images [] struct{
 		Enddate string `json:"enddate"`
 		Url     string `json:"url"`
+		Urlbase string `json:"urlbase"`
+		Copyright string `json:"copyright"`
 	} `json:"images"`
 }
 
-func GetUrl() string {
+func GetImage() JsonResponse {
 RETRY:
 	time.Sleep(time.Second)
 	res, err := http.Get("http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1")
@@ -76,8 +81,8 @@ RETRY:
 		log.Println(err)
 		goto RETRY
 	}
-	jr := &JsonResponse{}
-	if err := json.Unmarshal(buffer, jr); err != nil {
+	jr := JsonResponse{}
+	if err := json.Unmarshal(buffer, &jr); err != nil {
 		log.Println(err, string(buffer))
 		goto RETRY
 	}
@@ -87,10 +92,10 @@ RETRY:
 		goto RETRY
 	}
 
-	return "http://cn.bing.com" + jr.Images[0].Url
+	return jr
 }
 
-func GetImage(url string) {
+func DownloadImage(url string) {
 RETRY:
 	time.Sleep(time.Second)
 	res, err := http.Get(url)
@@ -115,6 +120,34 @@ RETRY:
 
 	if err := uploader.Put(context.Background(), nil, token, filepath.Base(url), res.Body, int64(res.ContentLength), nil); err != nil {
 		log.Println(err)
+		goto RETRY
+	}
+}
+
+func SaveMongo(response JsonResponse) {
+	session := Session.Copy()
+	defer session.Close()
+
+	retry := true
+RETRY:
+	if retry {
+		session.Refresh()
+		time.Sleep(time.Second)
+	}
+	retry = true
+
+	updateMap := bson.M{
+		"$set": bson.M{
+			"name": filepath.Base(response.Images[0].Urlbase),
+			"url": "https://cn.bing.com" + response.Images[0].Url,
+			"info": response.Images[0].Copyright,
+			"time": time.Now(),
+		},
+	}
+
+	_, err := session.DB(MONGO_DB).C(MONGO_C).UpsertId(response.Images[0].Enddate, updateMap)
+	if err != nil {
+		log.Printf("mongo upsert id failed: %v\n", err)
 		goto RETRY
 	}
 }
