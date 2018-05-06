@@ -12,6 +12,7 @@ import (
 	"github.com/qiniu/api.v7/storage"
 	"github.com/qiniu/api.v7/auth/qbox"
 	"gopkg.in/mgo.v2/bson"
+	"strings"
 )
 
 type Handler struct {
@@ -45,12 +46,18 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) Crawl() {
 	for {
+		log.Println("wake up")
 		imageInfo := GetImage()
+		log.Println("get", imageInfo.Images[0].Url)
 		DownloadImage("https://cn.bing.com" + imageInfo.Images[0].Url)
+		log.Println("download", imageInfo.Images[0].Url)
 		SaveMongo(imageInfo)
+		log.Println("save mongo")
 		h.Finished = time.Now().Local().Format("20060102")
+		log.Println("update finished date to", h.Finished)
 		nextDay := time.Now().Local().Add(24 * time.Hour)
 		nextDay = time.Date(nextDay.Year(), nextDay.Month(), nextDay.Day(), 0, 0, 0, 0, nextDay.Location())
+		log.Printf("sleep %v to %v", nextDay.Sub(time.Now()), nextDay)
 		time.Sleep(nextDay.Sub(time.Now()))
 	}
 }
@@ -68,7 +75,7 @@ func GetImage() JsonResponse {
 	client := &http.Client{}
 
 RETRY:
-	time.Sleep(time.Second)
+	time.Sleep(5 * time.Second)
 
 	req, err := http.NewRequest("GET", "http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", nil)
 	if err != nil {
@@ -98,6 +105,11 @@ RETRY:
 	if len(jr.Images) != 1 || jr.Images[0].Enddate != time.Now().Local().Format("20060102") || jr.Images[0].Url == "" {
 		log.Println(time.Now().Local().Format("20060102"))
 		log.Println(string(buffer))
+		goto RETRY
+	}
+
+	if !strings.Contains(jr.Images[0].Urlbase, "ZH-CN") {
+		log.Println("not in China:", jr.Images[0].Urlbase)
 		goto RETRY
 	}
 
