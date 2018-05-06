@@ -65,9 +65,18 @@ type JsonResponse struct {
 }
 
 func GetImage() JsonResponse {
+	client := &http.Client{}
+
 RETRY:
 	time.Sleep(time.Second)
-	res, err := http.Get("http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1")
+
+	req, err := http.NewRequest("GET", "http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", nil)
+	if err != nil {
+		log.Panic(err)
+	}
+	// 服务迁到国外后，欺骗服务器请求时从国内发出的，这样可以获得中国境内的 Bing 首页壁纸
+	req.Header.Add("X-Forwarded-For", "115.28.191.67")
+	res, err := client.Do(req)
 	if err != nil {
 		log.Println(err)
 		goto RETRY
