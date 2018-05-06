@@ -1,8 +1,11 @@
+version=`git tag -l | tail -n 1`
+name=bingwall
+
 build:
 	go build
 dkbuild: build
-	docker build -t registry.cn-hangzhou.aliyuncs.com/wolfogre-hub/bingwall:${version} .
+	docker build -t reg.qiniu.com/wolfogre/${name}:${version} .
 dkpush:
-	docker push registry.cn-hangzhou.aliyuncs.com/wolfogre-hub/bingwall:${version}
+	docker push reg.qiniu.com/wolfogre/${name}:${version}
 clean:
-	rm -f bingwall
+	rm -f ${name}
