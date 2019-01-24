@@ -141,7 +141,7 @@ RETRY:
 		UseCdnDomains: false,
 	})
 
-	if err := uploader.Put(context.Background(), nil, token, filepath.Base(url), res.Body, int64(res.ContentLength), nil); err != nil {
+	if err := uploader.Put(context.Background(), nil, token, filepath.Base(url), res.Body, int64(res.ContentLength), &storage.PutExtra{}); err != nil {
 		log.Println(err)
 		goto RETRY
 	}
