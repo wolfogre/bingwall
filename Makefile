@@ -1,9 +1,9 @@
-version=$(shell git tag -l | tail -n 1`)
+version=$(shell git tag -l | tail -n 1)
 name=bingwall
 
 build:
 	mkdir -p bin
-	GOOS=linux GOARCH=amd64 go build -o $(name)
+	GOOS=linux GOARCH=amd64 go build -o bin/$(name)
 image: build
 	docker build -t reg.qiniu.com/wolfogre/$(name):$(version) .
 push:
