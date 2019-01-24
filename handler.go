@@ -15,7 +15,9 @@ import (
 	"strings"
 )
 
-
+const (
+	RootUrl = "https://www2.bing.com"
+)
 
 type Handler struct {
 	Finished string
@@ -51,7 +53,7 @@ func (h *Handler) Crawl() {
 		log.Println("wake up")
 		imageInfo := GetImage()
 		log.Println("get", imageInfo.Images[0].Url)
-		DownloadImage("https://cn.bing.com" + imageInfo.Images[0].Url)
+		DownloadImage(RootUrl + imageInfo.Images[0].Url)
 		log.Println("download", imageInfo.Images[0].Url)
 		SaveMongo(imageInfo)
 		log.Println("save mongo")
@@ -65,7 +67,7 @@ func (h *Handler) Crawl() {
 }
 
 type JsonResponse struct {
-	Images [] struct{
+	Images []struct{
 		Enddate string `json:"enddate"`
 		Url     string `json:"url"`
 		Urlbase string `json:"urlbase"`
@@ -75,16 +77,14 @@ type JsonResponse struct {
 
 func GetImage() JsonResponse {
 	client := &http.Client{}
+	req, err := http.NewRequest("GET", RootUrl + "/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn", nil)
+	if err != nil {
+		log.Panic(err)
+	}
 
 RETRY:
 	time.Sleep(5 * time.Second)
 
-	req, err := http.NewRequest("GET", "http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", nil)
-	if err != nil {
-		log.Panic(err)
-	}
-	// 服务迁到国外后，欺骗服务器请求时从国内发出的，这样可以获得中国境内的 Bing 首页壁纸
-	req.Header.Add("X-Forwarded-For", "115.28.191.67")
 	res, err := client.Do(req)
 	if err != nil {
 		log.Println(err)
