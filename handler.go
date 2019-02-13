@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	RootUrl = "https://cn.bing.com"
+	RootUrl = "http://cn.bing.com"
 )
 
 type Handler struct {
