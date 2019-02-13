@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	RootUrl = "https://www2.bing.com"
+	RootUrl = "https://cn.bing.com"
 )
 
 type Handler struct {
@@ -53,7 +53,11 @@ func (h *Handler) Crawl() {
 		log.Println("wake up")
 		imageInfo := GetImage()
 		log.Println("get", imageInfo.Images[0].Url)
-		DownloadImage(RootUrl + imageInfo.Images[0].Url)
+		imageUrl := imageInfo.Images[0].Url
+		if !strings.HasPrefix(imageUrl, "http") {
+			imageUrl = RootUrl + imageInfo.Images[0].Url
+		}
+		DownloadImage(imageUrl)
 		log.Println("download", imageInfo.Images[0].Url)
 		SaveMongo(imageInfo)
 		log.Println("save mongo")
@@ -120,7 +124,7 @@ RETRY:
 
 func DownloadImage(url string) {
 RETRY:
-	time.Sleep(time.Second)
+	time.Sleep(5 * time.Second)
 	res, err := http.Get(url)
 	if err != nil {
 		log.Println(err)
@@ -151,18 +155,22 @@ func SaveMongo(response JsonResponse) {
 	session := Session.Copy()
 	defer session.Close()
 
-	retry := true
+	retry := false
 RETRY:
 	if retry {
 		session.Refresh()
-		time.Sleep(time.Second)
+		time.Sleep(5 * time.Second)
 	}
 	retry = true
 
+	imageUrl := response.Images[0].Url
+	if !strings.HasPrefix(imageUrl, "http") {
+		imageUrl = RootUrl + response.Images[0].Url
+	}
 	updateMap := bson.M{
 		"$set": bson.M{
 			"name": filepath.Base(response.Images[0].Urlbase),
-			"url": "https://cn.bing.com" + response.Images[0].Url,
+			"url": imageUrl,
 			"info": response.Images[0].Copyright,
 			"time": time.Now(),
 		},
