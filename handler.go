@@ -1,18 +1,18 @@
 package main
 
 import (
-	"net/http"
-	"time"
-	"log"
-	"io/ioutil"
-	"encoding/json"
 	"context"
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"path/filepath"
-
-	"github.com/qiniu/api.v7/storage"
-	"github.com/qiniu/api.v7/auth/qbox"
-	"gopkg.in/mgo.v2/bson"
 	"strings"
+	"time"
+
+	"github.com/qiniu/api.v7/auth/qbox"
+	"github.com/qiniu/api.v7/storage"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -71,17 +71,17 @@ func (h *Handler) Crawl() {
 }
 
 type JsonResponse struct {
-	Images []struct{
-		Enddate string `json:"enddate"`
-		Url     string `json:"url"`
-		Urlbase string `json:"urlbase"`
+	Images []struct {
+		Enddate   string `json:"enddate"`
+		Url       string `json:"url"`
+		Urlbase   string `json:"urlbase"`
 		Copyright string `json:"copyright"`
 	} `json:"images"`
 }
 
 func GetImage() JsonResponse {
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", RootUrl + "/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn", nil)
+	req, err := http.NewRequest("GET", RootUrl+"/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn", nil)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -140,8 +140,8 @@ RETRY:
 	}
 	token := policy.UploadToken(qbox.NewMac(*access, *secret))
 	uploader := storage.NewFormUploader(&storage.Config{
-		Zone: &storage.ZoneHuadong,
-		UseHTTPS: false,
+		Zone:          &storage.ZoneHuadong,
+		UseHTTPS:      false,
 		UseCdnDomains: false,
 	})
 
@@ -170,7 +170,7 @@ RETRY:
 	updateMap := bson.M{
 		"$set": bson.M{
 			"name": filepath.Base(response.Images[0].Urlbase),
-			"url": imageUrl,
+			"url":  imageUrl,
 			"info": response.Images[0].Copyright,
 			"time": time.Now(),
 		},

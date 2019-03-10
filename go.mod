@@ -1,4 +1,4 @@
-module github.com/wolfogre/bingwall
+module bingwall
 
 require (
 	github.com/kr/pretty v0.1.0 // indirect
