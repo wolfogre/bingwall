@@ -1,16 +1,13 @@
 package main
 
 import (
+	"bingwall/internal/crawler"
+	"bingwall/internal/db"
+	"bingwall/internal/storage"
+	"bingwall/internal/version"
+	"bingwall/internal/web"
 	"flag"
 	"log"
-	"net/http"
-
-	"gopkg.in/mgo.v2"
-)
-
-const (
-	MONGO_DB = "bingwall"
-	MONGO_C  = "history"
 )
 
 var (
@@ -18,11 +15,12 @@ var (
 	secret  = flag.String("secret", "", "Secret key")
 	bucket  = flag.String("bucket", "", "Bucket")
 	mongo   = flag.String("mongo", "", "mongo url")
-	Session *mgo.Session
 )
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+	log.Println("version", version.Version())
 
 	flag.Parse()
 	if *access == "" || *secret == "" || *bucket == "" || *mongo == "" {
@@ -30,13 +28,14 @@ func main() {
 		log.Fatal()
 	}
 
-	var err error
-	Session, err = mgo.Dial(*mongo)
-	if err != nil {
-		log.Fatal(err)
+	if err := db.Init(*mongo); err != nil {
+		log.Panic(err)
 	}
+	storage.InitQiniu(*bucket, *access, *secret)
 
-	handler := &Handler{}
-	go handler.Crawl()
-	http.ListenAndServe(":80", handler)
+	crawler.RunDaemon()
+
+	if err := web.Run(); err != nil {
+		log.Panic(err)
+	}
 }
