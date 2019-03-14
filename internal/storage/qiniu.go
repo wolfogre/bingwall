@@ -37,7 +37,5 @@ func UploadToQiniu(name string, content []byte) error {
 		UseCdnDomains: false,
 	})
 	reader := bytes.NewReader(content)
-	if err := uploader.Put(context.Background(), nil, token, name, reader, reader.Size(), &qiniustorage.PutExtra{}); err != nil {
-		return err
-	}
+	return uploader.Put(context.Background(), nil, token, name, reader, reader.Size(), &qiniustorage.PutExtra{})
 }

@@ -1,10 +1,5 @@
 package entity
 
-import (
-	"regexp"
-	"time"
-)
-
 /*
 https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn
 
@@ -57,17 +52,4 @@ type ApiImage struct {
 	Drk           int    `json:"drk"`
 	Top           int    `json:"top"`
 	Bot           int    `json:"bot"`
-}
-
-func (i ApiImage) ToHistory() History {
-	ret := History{
-		Id: i.EndDate,
-		Info: i.Copyright,
-		Time: time.Now(),
-	}
-	// AgriculturalPi_ZH-CN9754138523
-	nameReg := regexp.MustCompile("[A-Za-z0-9]+_ZH-CN[0-9]+")
-	// AgriculturalPi_ZH-CN9754138523_1920x1080.jpg
-	filenameReg := regexp.MustCompile("[A-Za-z0-9]+_ZH-CN[0-9]+_1920x1080\\.jpg")
-	ret.Name = nameReg.FindString()
 }
