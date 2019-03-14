@@ -1,34 +1,25 @@
 package web
 
 import (
-	"time"
-
-	"bingwall/internal/crawler"
-
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	routerStatus = "/_status"
+	routerRobots = "/robots.txt"
+	routerFavicon = "/favicon.ico"
+	routerDownload = "/download"
+)
+
 func Run() error {
-	r := gin.Default()
-	r.GET("/_status", func(c *gin.Context) {
-		if crawler.LatestDay != crawler.Today() {
-			if time.Now().Hour() == 0 {
-				c.JSON(200, gin.H{
-					"latest_day": crawler.LatestDay,
-					"forgiven": true,
-				})
-			} else {
-				c.JSON(500, gin.H{
-					"latest_day": crawler.LatestDay,
-					"forgiven": false,
-				})
-			}
-		} else {
-			c.JSON(200, gin.H{
-				"latest_day": crawler.LatestDay,
-				"forgiven": false,
-			})
-		}
-	})
-	return r.Run(":80")
+	gin.SetMode(gin.ReleaseMode)
+
+	engine := gin.New()
+	engine.Use(gin.Recovery())
+	engine.Use(gin.LoggerWithWriter(gin.DefaultWriter, routerStatus, routerRobots, routerFavicon))
+
+	engine.GET(routerStatus, status)
+	engine.GET(routerDownload, download)
+
+	return engine.Run(":80")
 }
