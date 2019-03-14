@@ -20,7 +20,7 @@ func download(c *gin.Context) {
 
 	date := c.Query("date")
 	if _, err := time.ParseInLocation(entity.DayFormat, date, time.Local); err != nil {
-		c.AbortWithStatus(401)
+		c.AbortWithStatus(400)
 		return
 	}
 
