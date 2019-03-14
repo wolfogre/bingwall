@@ -77,6 +77,10 @@ RETRY:
 			goto RETRY
 		}
 		if exists {
+			if strings.Compare(LatestDay, image.Id) < 0 {
+				LatestDay = image.Id
+				log.Printf("updated latest day to %v\n", LatestDay)
+			}
 			continue
 		}
 
