@@ -24,7 +24,7 @@ func Today() string {
 	return time.Now().Format(dayFormat)
 }
 
-func RunDaemon() {
+func Run() {
 	for {
 		log.Println("wake up")
 
@@ -82,7 +82,11 @@ RETRY:
 
 		log.Printf("find new date: %v\n", image.Id)
 
-		content, err := downloadImage(v.Url)
+		fileUrl := v.Url
+		if !strings.HasPrefix(fileUrl, "http") {
+			fileUrl = rootUrl + fileUrl
+		}
+		content, err := downloadImage(fileUrl)
 		if err != nil {
 			log.Printf("download image failed: %v\n", err)
 			goto RETRY

@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	access  = flag.String("access", "", "Access key")
-	secret  = flag.String("secret", "", "Secret key")
-	bucket  = flag.String("bucket", "", "Bucket")
+	access  = flag.String("access", "", "access key")
+	secret  = flag.String("secret", "", "secret key")
+	bucket  = flag.String("bucket", "", "bucket")
 	mongo   = flag.String("mongo", "", "mongo url")
 )
 
@@ -33,7 +33,7 @@ func main() {
 	}
 	storage.InitQiniu(*bucket, *access, *secret)
 
-	crawler.RunDaemon()
+	go crawler.Run()
 
 	if err := web.Run(); err != nil {
 		log.Panic(err)
