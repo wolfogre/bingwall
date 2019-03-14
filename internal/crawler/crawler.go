@@ -13,7 +13,6 @@ import (
 const (
 	rootUrl = "https://cn.bing.com"
 	apiPath = "/HPImageArchive.aspx?format=js&idx=0&n=8&mkt=zh-cn"
-	dayFormat = "20060102"
 )
 
 var (
@@ -21,7 +20,7 @@ var (
 )
 
 func Today() string {
-	return time.Now().Format(dayFormat)
+	return time.Now().Format(entity.DayFormat)
 }
 
 func Run() {

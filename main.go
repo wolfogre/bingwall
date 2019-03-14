@@ -14,6 +14,7 @@ var (
 	access  = flag.String("access", "", "access key")
 	secret  = flag.String("secret", "", "secret key")
 	bucket  = flag.String("bucket", "", "bucket")
+	domain = flag.String("domain", "", "download domain")
 	mongo   = flag.String("mongo", "", "mongo url")
 )
 
@@ -23,7 +24,7 @@ func main() {
 	log.Println("version", version.Version())
 
 	flag.Parse()
-	if *access == "" || *secret == "" || *bucket == "" || *mongo == "" {
+	if *access == "" || *secret == "" || *bucket == "" || *domain == "" || *mongo == "" {
 		flag.PrintDefaults()
 		log.Fatal()
 	}
@@ -31,7 +32,7 @@ func main() {
 	if err := db.Init(*mongo); err != nil {
 		log.Panic(err)
 	}
-	storage.InitQiniu(*bucket, *access, *secret)
+	storage.InitQiniu(*domain, *bucket, *access, *secret)
 
 	go crawler.Run()
 

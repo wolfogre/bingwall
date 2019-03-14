@@ -39,6 +39,15 @@ func InsertHistory(history entity.History) error {
 	return err
 }
 
+func FindHistory(id string) (*entity.History, error) {
+	collect := mongoClient.Database(databaseName).Collection(collectionName)
+	ret := entity.History{}
+	err := collect.FindOne(context.Background(), bson.M{
+		"_id": id,
+	}).Decode(&ret)
+	return &ret, err
+}
+
 func ExistHistory(id string) (bool, error) {
 	collect := mongoClient.Database(databaseName).Collection(collectionName)
 	count, err := collect.CountDocuments(context.Background(), bson.M{
