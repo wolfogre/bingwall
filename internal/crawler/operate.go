@@ -1,11 +1,12 @@
 package crawler
 
 import (
-	"bingwall/internal/entity"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"bingwall/internal/entity"
 )
 
 func getImageInfos() (*entity.Api, error) {
@@ -29,7 +30,7 @@ func getImageInfos() (*entity.Api, error) {
 	return result, err
 }
 
-func downloadImage(url string) ([]byte, error){
+func downloadImage(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err

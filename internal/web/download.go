@@ -1,14 +1,16 @@
 package web
 
 import (
-	"bingwall/internal/db"
-	"bingwall/internal/entity"
-	"bingwall/internal/storage"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gin-gonic/gin"
+
+	"bingwall/internal/db"
+	"bingwall/internal/entity"
+	"bingwall/internal/storage"
 )
 
 var (
@@ -37,7 +39,7 @@ func download(c *gin.Context) {
 	}
 
 	c.Header("Content-type", "application/octet-stream")
-	c.Header("Content-Disposition", "attachment; filename=" + fmt.Sprintf("%s_%s", date, history.Filename))
+	c.Header("Content-Disposition", "attachment; filename="+fmt.Sprintf("%s_%s", date, history.Filename))
 
 	if c.Request.Method == http.MethodGet {
 		if c.Request.Method == http.MethodGet {

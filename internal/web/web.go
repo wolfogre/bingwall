@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	routerStatus = "/_status"
-	routerRobots = "/robots.txt"
-	routerFavicon = "/favicon.ico"
+	routerStatus   = "/_status"
+	routerRobots   = "/robots.txt"
+	routerFavicon  = "/favicon.ico"
 	routerDownload = "/download"
 )
 

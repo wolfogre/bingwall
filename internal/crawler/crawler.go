@@ -1,13 +1,14 @@
 package crawler
 
 import (
-	"bingwall/internal/db"
-	"bingwall/internal/entity"
-	"bingwall/internal/storage"
 	"log"
 	"regexp"
 	"strings"
 	"time"
+
+	"bingwall/internal/db"
+	"bingwall/internal/entity"
+	"bingwall/internal/storage"
 )
 
 const (
@@ -55,7 +56,7 @@ RETRY:
 
 	for _, v := range infos.Images {
 		image := entity.History{
-			Id: v.EndDate,
+			Id:   v.EndDate,
 			Info: v.Copyright,
 			Time: time.Now(),
 		}
@@ -119,4 +120,3 @@ RETRY:
 		goto RETRY
 	}
 }
-

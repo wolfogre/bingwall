@@ -1,21 +1,22 @@
 package main
 
 import (
+	"flag"
+	"log"
+
 	"bingwall/internal/crawler"
 	"bingwall/internal/db"
 	"bingwall/internal/storage"
 	"bingwall/internal/version"
 	"bingwall/internal/web"
-	"flag"
-	"log"
 )
 
 var (
-	access  = flag.String("access", "", "access key")
-	secret  = flag.String("secret", "", "secret key")
-	bucket  = flag.String("bucket", "", "bucket")
+	access = flag.String("access", "", "access key")
+	secret = flag.String("secret", "", "secret key")
+	bucket = flag.String("bucket", "", "bucket")
 	domain = flag.String("domain", "", "download domain")
-	mongo   = flag.String("mongo", "", "mongo url")
+	mongo  = flag.String("mongo", "", "mongo url")
 )
 
 func main() {

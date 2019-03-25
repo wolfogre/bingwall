@@ -1,31 +1,33 @@
 package web
 
 import (
-	"bingwall/internal/crawler"
-	"github.com/gin-gonic/gin"
 	"time"
+
+	"github.com/gin-gonic/gin"
+
+	"bingwall/internal/crawler"
 )
 
 func status(c *gin.Context) {
 	if crawler.LatestDay != crawler.Today() {
 		if time.Now().Hour() == 0 {
 			c.JSON(200, gin.H{
-				"ok": true,
+				"ok":         true,
 				"latest_day": crawler.LatestDay,
-				"forgiven": true,
+				"forgiven":   true,
 			})
 		} else {
 			c.JSON(500, gin.H{
-				"ok": false,
+				"ok":         false,
 				"latest_day": crawler.LatestDay,
-				"forgiven": false,
+				"forgiven":   false,
 			})
 		}
 	} else {
 		c.JSON(200, gin.H{
-			"ok": true,
+			"ok":         true,
 			"latest_day": crawler.LatestDay,
-			"forgiven": false,
+			"forgiven":   false,
 		})
 	}
 }
