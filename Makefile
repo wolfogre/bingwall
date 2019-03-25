@@ -20,3 +20,4 @@ clean:
 	rm -rf bin
 
 all: image push clean
+
