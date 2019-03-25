@@ -6,6 +6,7 @@ import (
 	"bingwall/internal/storage"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"sync"
 	"time"
 )
@@ -35,15 +36,19 @@ func download(c *gin.Context) {
 		history.Filename = history.Name + "_1920x1080.jpg"
 	}
 
-	content, err := storage.DowloadFromQiniu(history.Filename)
-	if err != nil {
-		c.AbortWithStatusJSON(500, gin.H{
-			"error": err,
-		})
-		return
-	}
-
 	c.Header("Content-type", "application/octet-stream")
 	c.Header("Content-Disposition", "attachment; filename=" + fmt.Sprintf("%s_%s", date, history.Filename))
-	c.Writer.Write(content)
+
+	if c.Request.Method == http.MethodGet {
+		if c.Request.Method == http.MethodGet {
+			content, err := storage.DowloadFromQiniu(history.Filename)
+			if err != nil {
+				c.AbortWithStatusJSON(500, gin.H{
+					"error": err,
+				})
+				return
+			}
+			c.Writer.Write(content)
+		}
+	}
 }

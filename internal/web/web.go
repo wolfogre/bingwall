@@ -20,6 +20,7 @@ func Run() error {
 
 	engine.GET(routerStatus, status)
 	engine.GET(routerDownload, download)
+	engine.HEAD(routerDownload, download)
 
 	return engine.Run(":80")
 }
