@@ -35,7 +35,7 @@ func download(c *gin.Context) {
 		return
 	}
 	if history.Filename == "" {
-		history.Filename = history.Name + "_1920x1080.jpg"
+		history.Filename = history.Name + "_UHD.jpg"
 	}
 
 	c.Header("Content-type", "application/octet-stream")

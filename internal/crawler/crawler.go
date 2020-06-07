@@ -65,7 +65,7 @@ RETRY:
 			log.Printf("can't get name from %v\n", v.UrlBase)
 			goto RETRY
 		}
-		image.Filename = regexp.MustCompile("[A-Za-z0-9]+_ZH-CN[0-9]+_1920x1080\\.jpg").FindString(v.Url)
+		image.Filename = regexp.MustCompile("[A-Za-z0-9]+_ZH-CN[0-9]+_UHD\\.jpg").FindString(v.Url)
 		if image.Filename == "" {
 			log.Printf("can't get filename from %v\n", v.UrlBase)
 			goto RETRY
