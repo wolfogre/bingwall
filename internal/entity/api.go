@@ -5,35 +5,35 @@ const (
 )
 
 /*
-https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn
+curl "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn&uhd=1" | jq
 
 {
-    "images": [
-        {
-            "startdate": "20190313",
-            "fullstartdate": "201903131600",
-            "enddate": "20190314",
-            "url": "/th?id=OHR.AgriculturalPi_ZH-CN9754138523_1920x1080.jpg&rf=NorthMale_1920x1080.jpg&pid=hp",
-            "urlbase": "/th?id=OHR.AgriculturalPi_ZH-CN9754138523",
-            "copyright": "圆形农田，科罗拉多州摩根县 (© Jim Wark/Getty Images)",
-            "copyrightlink": "http://www.bing.com/search?q=%E5%9C%86%E5%BD%A2%E5%86%9C%E7%94%B0&form=hpcapt&mkt=zh-cn",
-            "title": "",
-            "quiz": "/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20190313_AgriculturalPi%22&FORM=HPQUIZ",
-            "wp": true,
-            "hsh": "84d6f5070a773f3aa6e2b5b5a53a3435",
-            "drk": 1,
-            "top": 1,
-            "bot": 1,
-            "hs": [ ]
-        }
-    ],
-    "tooltips": {
-        "loading": "正在加载...",
-        "previous": "上一个图像",
-        "next": "下一个图像",
-        "walle": "此图片不能下载用作壁纸。",
-        "walls": "下载今日美图。仅限用作桌面壁纸。"
+  "images": [
+    {
+      "startdate": "20200606",
+      "fullstartdate": "202006061600",
+      "enddate": "20200607",
+      "url": "/th?id=OHR.LaPertusa_ZH-CN7227946330_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=1920&h=1080&rs=1&c=4",
+      "urlbase": "/th?id=OHR.LaPertusa_ZH-CN7227946330",
+      "copyright": "La Pertusa教堂，西班牙莱里达 (© bbsferrari/Getty Images)",
+      "copyrightlink": "https://www.bing.com/search?q=La+Pertusa%E6%95%99%E5%A0%82&form=hpcapt&mkt=zh-cn",
+      "title": "",
+      "quiz": "/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20200606_LaPertusa%22&FORM=HPQUIZ",
+      "wp": true,
+      "hsh": "8e7fc0d19c6744cf16569626d29a787f",
+      "drk": 1,
+      "top": 1,
+      "bot": 1,
+      "hs": []
     }
+  ],
+  "tooltips": {
+    "loading": "正在加载...",
+    "previous": "上一个图像",
+    "next": "下一个图像",
+    "walle": "此图片不能下载用作壁纸。",
+    "walls": "下载今日美图。仅限用作桌面壁纸。"
+  }
 }
 */
 

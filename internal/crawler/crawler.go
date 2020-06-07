@@ -60,16 +60,13 @@ RETRY:
 			Info: v.Copyright,
 			Time: time.Now(),
 		}
+		// "urlbase": "/th?id=OHR.LaPertusa_ZH-CN7227946330"
 		image.Name = regexp.MustCompile("[A-Za-z0-9]+_ZH-CN[0-9]+").FindString(v.UrlBase)
 		if image.Name == "" {
 			log.Printf("can't get name from %v\n", v.UrlBase)
 			goto RETRY
 		}
-		image.Filename = regexp.MustCompile("[A-Za-z0-9]+_ZH-CN[0-9]+_UHD\\.jpg").FindString(v.Url)
-		if image.Filename == "" {
-			log.Printf("can't get filename from %v\n", v.UrlBase)
-			goto RETRY
-		}
+		image.Filename = image.Name + "_UHD.jpg"
 
 		exists, err := db.ExistHistory(image.Id)
 		if err != nil {
@@ -86,7 +83,7 @@ RETRY:
 
 		log.Printf("find new date: %v\n", image.Id)
 
-		fileUrl := v.Url
+		fileUrl := v.UrlBase + "_UHD.jpg"
 		if !strings.HasPrefix(fileUrl, "http") {
 			fileUrl = rootUrl + fileUrl
 		}
