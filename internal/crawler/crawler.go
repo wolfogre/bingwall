@@ -92,7 +92,7 @@ RETRY:
 			log.Printf("download image failed: %v\n", err)
 			goto RETRY
 		}
-		log.Printf("downloaded image from %v\n", v.Url)
+		log.Printf("downloaded image from %v\n", fileUrl)
 
 		if err := storage.UploadToQiniu(image.Filename, content); err != nil {
 			log.Printf("upload image failed: %v\n", err)
