@@ -7,7 +7,7 @@ check:
 
 build: check
 	mkdir -p bin
-	GOOS=linux GOARCH=amd64 go build -ldflags="-X $(NAME)/internal/version.timeVersion=$(UNIX_TIME)" -o bin/$(NAME)
+	GOOS=linux GOARCH=amd64 go build -ldflags="-X $(NAME)/internal/version.injectVersion=$(VERSION)" -o bin/$(NAME)
 
 image: build
 	docker build -t $(IMAGE_NAME):$(VERSION) .

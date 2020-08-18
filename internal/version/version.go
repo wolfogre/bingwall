@@ -1,10 +1,9 @@
 package version
 
 var (
-	mainVersion = "1.0"
-	timeVersion = "none"
+	injectVersion = "unknown"
 )
 
 func Version() string {
-	return mainVersion + "." + timeVersion
+	return injectVersion
 }
