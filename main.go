@@ -8,7 +8,6 @@ import (
 	"bingwall/internal/db"
 	"bingwall/internal/storage"
 	"bingwall/internal/version"
-	"bingwall/internal/web"
 )
 
 var (
@@ -35,9 +34,5 @@ func main() {
 	}
 	storage.InitQiniu(*domain, *bucket, *access, *secret)
 
-	go crawler.Run()
-
-	if err := web.Run(); err != nil {
-		log.Panic(err)
-	}
+	crawler.Run()
 }
