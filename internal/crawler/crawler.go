@@ -3,6 +3,7 @@ package crawler
 import (
 	"log"
 	"regexp"
+	"runtime"
 	"strings"
 	"time"
 
@@ -39,6 +40,7 @@ func Run() {
 		}
 
 		log.Printf("sleep %v to %v\n", nextDay.Sub(time.Now()), nextDay)
+		runtime.GC()
 		time.Sleep(nextDay.Sub(time.Now()))
 	}
 }
