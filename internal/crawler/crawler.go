@@ -26,7 +26,7 @@ func Today() string {
 	return time.Now().Format(entity.DayFormat)
 }
 
-func Run() {
+func Start() {
 	for {
 		log.Println("wake up")
 
@@ -42,6 +42,16 @@ func Run() {
 		log.Printf("sleep %v to %v\n", nextDay.Sub(time.Now()), nextDay)
 		runtime.GC()
 		time.Sleep(nextDay.Sub(time.Now()))
+	}
+}
+
+func Run() {
+	run()
+	nextDay := time.Now().AddDate(0, 0, 1)
+	nextDay = time.Date(nextDay.Year(), nextDay.Month(), nextDay.Day(), 0, 0, 0, 0, nextDay.Location())
+
+	if err := lampc.Prolong("bingwall", nextDay.Add(time.Hour)); err != nil {
+		log.Printf("Prolong: %v", err)
 	}
 }
 

@@ -19,6 +19,8 @@ var (
 )
 
 func main() {
+	defer log.Println("exit")
+
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	log.Println("version", version.Version())
